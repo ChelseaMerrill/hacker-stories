@@ -19,45 +19,56 @@ const App = () => {
       points: 5,
       objectID: 1,
     }
-  ]
-  // const searchTermState = React.useState('');
-  // const searchTerm = searchTermState[0];g
-  // const setSearchTerm = searchTermState[1];
+  ];
 
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState('React');
 
-  const handleChange = event => {
-    setSearchTerm(event.target.value);
-  }
+  const handleSearch = event => {
+    setSearchTerm(event.target.value)
+  };
+
+  const searchedStories = stories.filter(story => 
+    story.title.toLocaleLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div>
      <h1>My Hacker Stories</h1>
 
-     <label htmlFor='search'>Search: </label>
-     <input id='search' type='text' onChange={handleChange}/>
-
-      <p>
-        Searching for <strong>{searchTerm}</strong>.
-      </p>
+     <Search search={searchTerm} onSearch={handleSearch}/>
 
      <hr />
-     <List list={stories} />
+     <List list={searchedStories} />
      </div>
   );
-}
-     
-const List = props =>
-  props.list.map(item => (
-       <div key={item.objectID}>
+};
+
+//hook
+//useState takes in default and search term and setSearchTerm changes itself to what the searchTerm is
+const Search = ({ search, onSearch }) => (
+  <div>
+  <label htmlFor='search'>Search: </label>
+  <input
+   id='search' 
+   type='text' 
+   value={search}
+   onChange={onSearch}/>
+</div>
+)
+    
+const List = ({ list }) =>
+  list.map(item => <Item key={item.objectID} item={item}/>);
+  
+  const Item = ({item}) => (
+       <div>
          <span>
            <a href={item.url}>{item.title}</a>
          </span>
-         <span>{item.author}</span>
-         <span>{item.num_comments}</span>
-         <span>{item.points}</span>
+         <span>{item.author}, </span>
+         <span>{item.num_comments}, </span>
+         <span>{item.points}, </span>
        </div>
-      )); 
+  );
       
     
 
